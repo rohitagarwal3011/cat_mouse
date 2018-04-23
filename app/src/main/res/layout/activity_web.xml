@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".WebActivity">
+
+    <WebView
+        android:id="@+id/webview"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        />
+
+    <ImageButton
+        android:id="@+id/refresh"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_refresh"
+        android:layout_margin="5dp"/>
+    <Button
+        android:id="@+id/btEnd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="END"
+        android:layout_margin="5dp"
+        android:layout_gravity="right"/>
+
+    <TextView
+        android:id="@+id/tvUserType"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="RAT"
+        android:textStyle="bold"
+        android:padding="5dp"
+        android:textSize="25sp"
+        android:background="#83000000"
+        android:textColor="#fff"/>
+
+   <ImageButton
+       android:id="@+id/up"
+       android:layout_width="50dp"
+       android:layout_height="50dp"
+       android:src="@drawable/ic_arrow_upward"
+       android:layout_gravity="bottom|center_horizontal"
+       android:layout_marginBottom="70dp"
+       android:visibility="gone"
+
+       />
+
+    <ImageButton
+        android:id="@+id/down"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/ic_arrow_downward"
+        android:layout_gravity="bottom|center_horizontal"
+        android:layout_marginBottom="20dp"
+        android:visibility="gone"
+
+        />
+    <ImageButton
+        android:id="@+id/right"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/ic_arrow_right"
+        android:layout_gravity="bottom|center_horizontal"
+        android:layout_marginBottom="20dp"
+        android:visibility="gone"
+        android:layout_marginLeft="50dp"/>
+    <ImageButton
+        android:id="@+id/left"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/ic_arrow_left"
+        android:layout_gravity="bottom|center_horizontal"
+        android:layout_marginBottom="20dp"
+        android:layout_marginRight="50dp"
+        android:visibility="gone"
+        />
+
+    <ImageButton
+        android:id="@+id/down2"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/ic_arrow_downward"
+        android:layout_gravity="bottom|center_horizontal"
+        android:layout_marginBottom="20dp"
+        android:visibility="gone"
+
+        />
+
+    <ImageButton
+        android:id="@+id/up2"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/ic_arrow_upward"
+        android:layout_gravity="bottom|center_horizontal"
+        android:layout_marginBottom="70dp"
+        android:visibility="gone"
+        />
+    <ImageButton
+        android:id="@+id/left2"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/ic_arrow_left"
+        android:layout_gravity="bottom|center_horizontal"
+        android:layout_marginBottom="20dp"
+        android:layout_marginRight="50dp"
+        android:visibility="gone"
+        />
+    <ImageButton
+        android:id="@+id/right2"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/ic_arrow_right"
+        android:layout_gravity="bottom|center_horizontal"
+        android:layout_marginBottom="20dp"
+        android:visibility="gone"
+        android:layout_marginLeft="50dp"
+        />
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="PLAYER 1"
+        android:textColor="#ffffff"
+        android:textStyle="bold"
+        android:visibility="gone"
+        android:layout_gravity="bottom|center_horizontal"
+        android:layout_marginBottom="5dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="PLAYER 2"
+        android:textColor="#ffffff"
+        android:textStyle="bold"
+        android:visibility="gone"
+        android:layout_marginTop="5dp"
+        android:layout_gravity="center_horizontal"
+        android:rotation="180"/>
+
+    <FrameLayout
+        android:id="@+id/flOverlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#57000000"/>
+        <TextView
+            android:id="@+id/tvMsg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="PAUSED"
+            android:textStyle="bold"
+            android:textColor="#fff"
+            android:textSize="40sp"/>
+        <Button
+            android:id="@+id/back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="80dp"
+            android:text="Go Back"/>
+
+
+    </FrameLayout>
+</FrameLayout>
