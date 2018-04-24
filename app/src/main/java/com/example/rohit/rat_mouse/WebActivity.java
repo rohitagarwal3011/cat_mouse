@@ -1,9 +1,11 @@
 package com.example.rohit.rat_mouse;
 
+import android.Manifest;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -26,11 +28,14 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import pub.devrel.easypermissions.EasyPermissions;
 
-public class WebActivity extends AppCompatActivity implements View.OnClickListener, View.OnTouchListener {
+public class WebActivity extends AppCompatActivity implements View.OnClickListener, View.OnTouchListener ,EasyPermissions.PermissionCallbacks {
 
 
     WebView webView;
@@ -79,6 +84,12 @@ public class WebActivity extends AppCompatActivity implements View.OnClickListen
     ImageButton refresh;
     @BindView(R.id.tvUserType)
     TextView tvUserType;
+
+    private static final int REQUEST_CAMERA_PERMISSION = 1;
+    private static final String[] PERM_CAMERA = {Manifest.permission.CAMERA,android.Manifest.permission.RECORD_AUDIO};
+
+    private Boolean isPermissionGranted = false;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -181,7 +192,6 @@ public class WebActivity extends AppCompatActivity implements View.OnClickListen
 
         });
         JavaScriptInterface jsInterface = new JavaScriptInterface(this);
-        webView.loadUrl(getIntent().getStringExtra("link"));
         WebSettings webSettings = webView.getSettings();
         webSettings.setJavaScriptEnabled(true);
         webView.addJavascriptInterface(jsInterface, "JSInterface");
@@ -195,6 +205,42 @@ public class WebActivity extends AppCompatActivity implements View.OnClickListen
                         | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
                         | View.SYSTEM_UI_FLAG_FULLSCREEN
                         | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+
+        if(hasCameraPermission()){
+            isPermissionGranted=true;
+            webView.loadUrl(getIntent().getStringExtra("link"));
+            //myWebView.loadUrl(alertScript());
+        }else{
+            EasyPermissions.requestPermissions(
+                    this,
+                    "This app needs access to your camera so you can take pictures.",
+                    REQUEST_CAMERA_PERMISSION,
+                    PERM_CAMERA);
+        }
+
+
+    }
+
+    private boolean hasCameraPermission() {
+        return EasyPermissions.hasPermissions(WebActivity.this, PERM_CAMERA);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
+    }
+
+    @Override
+    public void onPermissionsGranted(int requestCode, @NonNull List<String> perms) {
+        webView.loadUrl(getIntent().getStringExtra("link"));
+        isPermissionGranted=true;
+    }
+
+    @Override
+    public void onPermissionsDenied(int requestCode, @NonNull List<String> perms) {
+        isPermissionGranted=false;
     }
 
     @Override

@@ -41,8 +41,22 @@ public class PlayerSelectActivity extends AppCompatActivity {
         setContentView(R.layout.activity_player_select);
         ButterKnife.bind(this);
         FirebaseSetup();
+//        CheckforUsers();
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+//        FirebaseSetup();
         CheckforUsers();
 
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        //removeListeners();
     }
 
     @OnClick({R.id.btnCat, R.id.btnMouse})
@@ -159,11 +173,19 @@ public class PlayerSelectActivity extends AppCompatActivity {
             intent.putExtra("type", "audience");
             startActivity(intent);
         }
+        else {
+            addListeners();
+        }
     }
 
     private void removeListeners() {
         cat_status.removeEventListener(cat_status_listener);
         rat_status.removeEventListener(rat_status_listener);
+    }
+
+    private void addListeners(){
+        cat_status.addValueEventListener(cat_status_listener);
+        rat_status.addValueEventListener(rat_status_listener);
     }
 
     @OnClick(R.id.reset)
