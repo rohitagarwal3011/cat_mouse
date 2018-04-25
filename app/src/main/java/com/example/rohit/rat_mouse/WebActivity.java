@@ -60,6 +60,7 @@ public class WebActivity extends AppCompatActivity implements View.OnClickListen
     DatabaseReference life_count;
     DatabaseReference timer;
 
+    String id;
 
     ValueEventListener cat_status_listener;
     ValueEventListener rat_status_listener;
@@ -110,6 +111,7 @@ public class WebActivity extends AppCompatActivity implements View.OnClickListen
         btEnd.setVisibility(View.VISIBLE);
         refresh.setVisibility(View.VISIBLE);
 
+        id = getIntent().getStringExtra("code");
 
         FirebaseSetup();
         setListeners();
@@ -420,10 +422,10 @@ public class WebActivity extends AppCompatActivity implements View.OnClickListen
     protected void onDestroy() {
 
         if (user_type.equalsIgnoreCase("cat")) {
-            cat_status.setValue("not_active");
+            cat_status.setValue(false);
             gameover.setValue(true);
         } else if (user_type.equalsIgnoreCase("rat")) {
-            rat_status.setValue("not_active");
+            rat_status.setValue(false);
             gameover.setValue(true);
         } else {
             Toast.makeText(this, "You are audience", Toast.LENGTH_LONG).show();
@@ -465,12 +467,12 @@ public class WebActivity extends AppCompatActivity implements View.OnClickListen
 
     private void FirebaseSetup() {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        cat_status = database.getReference("cat_status");
-        rat_status = database.getReference("rat_status");
-        audience_count = database.getReference("audience_count");
-        cat_pause = database.getReference("cat_pause");
-        rat_pause = database.getReference("rat_pause");
-        gameover = database.getReference("gameover");
+        cat_status = database.getReference("connect").child(id).child("catStatus");
+        rat_status = database.getReference("connect").child(id).child("ratStatus");
+        audience_count = database.getReference("connect").child(id).child("audienceCount");
+        cat_pause = database.getReference("connect").child(id).child("catPause");
+        rat_pause = database.getReference("connect").child(id).child("ratPause");
+        gameover = database.getReference("connect").child(id).child("gameover");
 
     }
 

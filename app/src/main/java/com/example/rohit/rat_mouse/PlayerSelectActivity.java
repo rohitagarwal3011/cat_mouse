@@ -34,12 +34,14 @@ public class PlayerSelectActivity extends AppCompatActivity {
     Boolean cat = false, rat = false;
     @BindView(R.id.reset)
     Button reset;
+    String id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player_select);
         ButterKnife.bind(this);
+        id= getIntent().getStringExtra("code");
         FirebaseSetup();
 //        CheckforUsers();
 
@@ -49,7 +51,9 @@ public class PlayerSelectActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 //        FirebaseSetup();
+        addListeners();
         CheckforUsers();
+
 
     }
 
@@ -64,65 +68,87 @@ public class PlayerSelectActivity extends AppCompatActivity {
         switch (view.getId()) {
             case R.id.btnCat:
 
-                cat_status.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        String status = (String) dataSnapshot.getValue();
-                        if (status.equalsIgnoreCase("not_active")) {
-                            cat_status.setValue("active");
-                            removeListeners();
-                            Intent intent = new Intent(PlayerSelectActivity.this, WebActivity.class);
-                            intent.putExtra("link", Constants.link);
-                            intent.putExtra("type", "cat");
-                            startActivity(intent);
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-                });
+                if(!cat)
+                {
+                    cat_status.setValue(true);
+                    removeListeners();
+                    Intent intent = new Intent(PlayerSelectActivity.this, WebActivity.class);
+                    intent.putExtra("link", Constants.link);
+                    intent.putExtra("type", "cat");
+                    intent.putExtra("code",id);
+                    startActivity(intent);
+                }
+//                cat_status.addListenerForSingleValueEvent(new ValueEventListener() {
+//                    @Override
+//                    public void onDataChange(DataSnapshot dataSnapshot) {
+//                        Boolean status = (Boolean) dataSnapshot.getValue();
+//                        if (!status) {
+//                            cat_status.setValue(true);
+//                            removeListeners();
+//                            Intent intent = new Intent(PlayerSelectActivity.this, WebActivity.class);
+//                            intent.putExtra("link", Constants.link);
+//                            intent.putExtra("type", "cat");
+//                            intent.putExtra("code",id);
+//                            startActivity(intent);
+//                        }
+//                    }
+//
+//                    @Override
+//                    public void onCancelled(DatabaseError databaseError) {
+//
+//                    }
+//                });
                 break;
 
             case R.id.btnMouse:
 
-                rat_status.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        String status = (String) dataSnapshot.getValue();
-                        if (status.equalsIgnoreCase("not_active")) {
-                            rat_status.setValue("active");
-                            removeListeners();
-                            Intent intent = new Intent(PlayerSelectActivity.this, WebActivity.class);
-                            intent.putExtra("link", Constants.link);
-                            intent.putExtra("type", "rat");
-                            startActivity(intent);
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-                });
+                if(!rat)
+                {
+                    rat_status.setValue(true);
+                    removeListeners();
+                    Intent intent = new Intent(PlayerSelectActivity.this, WebActivity.class);
+                    intent.putExtra("link", Constants.link);
+                    intent.putExtra("type", "rat");
+                    intent.putExtra("code",id);
+                    startActivity(intent);
+                }
+//                rat_status.addListenerForSingleValueEvent(new ValueEventListener() {
+//                    @Override
+//                    public void onDataChange(DataSnapshot dataSnapshot) {
+//                        Boolean status = (Boolean) dataSnapshot.getValue();
+//                        if (!status) {
+//                            rat_status.setValue(true);
+//                            removeListeners();
+//                            Intent intent = new Intent(PlayerSelectActivity.this, WebActivity.class);
+//                            intent.putExtra("link", Constants.link);
+//                            intent.putExtra("type", "rat");
+//                            intent.putExtra("code",id);
+//                            startActivity(intent);
+//                        }
+//                    }
+//
+//                    @Override
+//                    public void onCancelled(DatabaseError databaseError) {
+//
+//                    }
+//                });
                 break;
         }
     }
 
     private void FirebaseSetup() {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        cat_status = database.getReference("cat_status");
-        rat_status = database.getReference("rat_status");
-        audience_count = database.getReference("audience_count");
+        cat_status = database.getReference("connect").child(id).child("catStatus");
+        rat_status = database.getReference("connect").child(id).child("ratStatus");
+        audience_count = database.getReference("connect").child(id).child("audienceCount");
     }
 
     private void CheckforUsers() {
         cat_status_listener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                String status = (String) dataSnapshot.getValue();
-                if (status.equalsIgnoreCase("active")) {
+                Boolean status = (Boolean) dataSnapshot.getValue();
+                if (status) {
                     btnCat.setEnabled(false);
                     cat = true;
                 } else {
@@ -143,8 +169,8 @@ public class PlayerSelectActivity extends AppCompatActivity {
         rat_status_listener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                String status = (String) dataSnapshot.getValue();
-                if (status.equalsIgnoreCase("active")) {
+                Boolean status = (Boolean) dataSnapshot.getValue();
+                if (status) {
                     btnMouse.setEnabled(false);
                     rat = true;
                 } else {
@@ -171,6 +197,7 @@ public class PlayerSelectActivity extends AppCompatActivity {
             Intent intent = new Intent(PlayerSelectActivity.this, WebActivity.class);
             intent.putExtra("link", Constants.link);
             intent.putExtra("type", "audience");
+            intent.putExtra("code",id);
             startActivity(intent);
         }
         else {
@@ -191,7 +218,7 @@ public class PlayerSelectActivity extends AppCompatActivity {
     @OnClick(R.id.reset)
     public void onViewClicked() {
 
-        cat_status.setValue("not_active");
-        rat_status.setValue("not_active");
+        cat_status.setValue(false);
+        rat_status.setValue(false);
     }
 }
