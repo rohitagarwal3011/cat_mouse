@@ -24,6 +24,7 @@ public class PlayerSelectActivity extends AppCompatActivity {
     @BindView(R.id.btnMouse)
     Button btnMouse;
 
+    DatabaseReference session_node;
     DatabaseReference cat_status;
     DatabaseReference rat_status;
     DatabaseReference audience_count;
@@ -43,7 +44,7 @@ public class PlayerSelectActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         id= getIntent().getStringExtra("code");
         FirebaseSetup();
-//        CheckforUsers();
+        CheckforUsers();
 
     }
 
@@ -51,8 +52,8 @@ public class PlayerSelectActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 //        FirebaseSetup();
+//        CheckforUsers();
         addListeners();
-        CheckforUsers();
 
 
     }
@@ -60,7 +61,7 @@ public class PlayerSelectActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        //removeListeners();
+        removeListeners();
     }
 
     @OnClick({R.id.btnCat, R.id.btnMouse})
@@ -71,7 +72,7 @@ public class PlayerSelectActivity extends AppCompatActivity {
                 if(!cat)
                 {
                     cat_status.setValue(true);
-                    removeListeners();
+                   // removeListeners();
                     Intent intent = new Intent(PlayerSelectActivity.this, WebActivity.class);
                     intent.putExtra("link", Constants.link);
                     intent.putExtra("type", "cat");
@@ -105,7 +106,7 @@ public class PlayerSelectActivity extends AppCompatActivity {
                 if(!rat)
                 {
                     rat_status.setValue(true);
-                    removeListeners();
+                   // removeListeners();
                     Intent intent = new Intent(PlayerSelectActivity.this, WebActivity.class);
                     intent.putExtra("link", Constants.link);
                     intent.putExtra("type", "rat");
@@ -138,6 +139,7 @@ public class PlayerSelectActivity extends AppCompatActivity {
 
     private void FirebaseSetup() {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
+        session_node = database.getReference("connect").child(id);
         cat_status = database.getReference("connect").child(id).child("catStatus");
         rat_status = database.getReference("connect").child(id).child("ratStatus");
         audience_count = database.getReference("connect").child(id).child("audienceCount");
@@ -155,7 +157,7 @@ public class PlayerSelectActivity extends AppCompatActivity {
                     btnCat.setEnabled(true);
                     cat = false;
                 }
-                check_for_audience();
+               // check_for_audience();
             }
 
             @Override
@@ -177,7 +179,7 @@ public class PlayerSelectActivity extends AppCompatActivity {
                     btnMouse.setEnabled(true);
                     rat = false;
                 }
-                check_for_audience();
+                //check_for_audience();
 
             }
 
@@ -220,5 +222,13 @@ public class PlayerSelectActivity extends AppCompatActivity {
 
         cat_status.setValue(false);
         rat_status.setValue(false);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        session_node.setValue(null);
+        Intent intent = new Intent(PlayerSelectActivity.this,HomeActivity.class);
+        startActivity(intent);
     }
 }

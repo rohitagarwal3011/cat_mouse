@@ -386,9 +386,13 @@ public class WebActivity extends AppCompatActivity implements View.OnClickListen
 
     @OnClick(R.id.back)
     public void onViewClicked() {
+
         finish();
     }
 
+    @Override
+    public void onBackPressed() {
+    }
 
     private class MyBrowser extends WebViewClient {
         @Override
@@ -421,10 +425,13 @@ public class WebActivity extends AppCompatActivity implements View.OnClickListen
     @Override
     protected void onDestroy() {
 
+        removeListeners();
         if (user_type.equalsIgnoreCase("cat")) {
+            cat_pause.setValue(false);
             cat_status.setValue(false);
             gameover.setValue(true);
         } else if (user_type.equalsIgnoreCase("rat")) {
+            rat_pause.setValue(false);
             rat_status.setValue(false);
             gameover.setValue(true);
         } else {
@@ -579,7 +586,16 @@ public class WebActivity extends AppCompatActivity implements View.OnClickListen
             }
         };
 
+    }
 
+    private void removeListeners()
+    {
+        gameover.removeEventListener(gameoverListener);
+        cat_pause.removeEventListener(cat_pause_Listener);
+        rat_pause.removeEventListener(rat_pause_Listener);
+        cat_status.removeEventListener(cat_status_listener);
+        rat_status.removeEventListener(rat_status_listener);
+        timer.removeEventListener(timerListener);
     }
 
     private void check_for_pause() {
